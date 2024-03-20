@@ -24,6 +24,7 @@ dependencies {
     implementation("io.rest-assured:rest-assured:$restAssuredVersion")
     implementation("io.rest-assured:kotlin-extensions:$restAssuredVersion")
 
+    implementation("io.kotest:kotest-assertions-core-jvm:5.8.1")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.0")
 }
 
