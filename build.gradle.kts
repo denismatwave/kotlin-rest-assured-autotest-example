@@ -17,6 +17,8 @@ dependencies {
     implementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     implementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
     implementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+
+    implementation("io.rest-assured:rest-assured:5.4.0")
 }
 
 tasks.test {
