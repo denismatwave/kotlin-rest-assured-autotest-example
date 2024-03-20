@@ -2,6 +2,9 @@ import io.kotest.matchers.longs.shouldBeNonNegative
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import models.Pet
+import models.ResponseMessage
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import requests.Pet.deletePet
 import requests.Pet.getPet
@@ -9,10 +12,15 @@ import requests.Pet.postPet
 
 class SimpleTest {
 
+    private lateinit var petRequest : Pet
+
+    @BeforeEach
+    fun setUp() {
+        petRequest = Pet(name = "Pet1", status = "Test")
+    }
+
     @Test
     fun test() {
-        val petRequest = Pet(name = "Pet1", status = "Test")
-
         val pet = postPet(petRequest).extract().body().`as`(Pet::class.java)
         with (pet) {
             id.shouldNotBeNull()
@@ -26,5 +34,15 @@ class SimpleTest {
             .shouldBe(petId.toLong())
 
         deletePet(petId)
+    }
+
+    @Test
+    fun testDeletePet() {
+        val pet = postPet(petRequest).extract().body().`as`(Pet::class.java)
+        deletePet(pet.id.toString())
+        with(getPet(pet.id.toString(), 404).extract().body().`as`(ResponseMessage::class.java)) {
+            message.shouldBe("Pet not found")
+            type.shouldBe("error")
+        }
     }
 }

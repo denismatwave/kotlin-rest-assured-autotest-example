@@ -18,13 +18,13 @@ object Pet {
             statusCode(200)
         }
 
-    fun getPet(petId: String) =
+    fun getPet(petId: String, expectedStatusCode: Int = 200) =
         Given {
             spec(requestSpecification)
         } When {
             get("/$petId")
         } Then {
-            statusCode(200)
+            statusCode(expectedStatusCode)
         }
 
 
