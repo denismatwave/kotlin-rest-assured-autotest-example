@@ -9,7 +9,6 @@ import io.restassured.http.ContentType
 object BaseRestAssured {
     val requestSpecification = RequestSpecBuilder().addFilter(RequestLoggingFilter(LogDetail.ALL))
         .addFilter(ResponseLoggingFilter(LogDetail.ALL)).setBaseUri("https://petstore.swagger.io/v2")
-        .setBasePath("/pet")
         .setAccept(ContentType.JSON)
         .setContentType(ContentType.JSON)
         .build()

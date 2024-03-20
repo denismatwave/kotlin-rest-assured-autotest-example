@@ -4,46 +4,40 @@ import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
-import models.Pet
-import models.PetGetResponse
-import models.ResponseMessage
+import models.StoreOrder
 import utils.BaseRestAssured.requestSpecification
-import utils.PET
+import utils.ORDER
+import utils.STORE
 
-object Pet {
+object Store {
 
-    fun postPet(petRequest: Pet) =
+    fun postStore(storeRequest: StoreOrder) =
         Given {
             spec(requestSpecification)
-            body(petRequest)
+            body(storeRequest)
         } When {
-            post(PET)
+            post(STORE.plus(ORDER))
         } Then {
             statusCode(200)
         } Extract {
-            response().body().`as`(Pet::class.java)
+            response().body().`as`(StoreOrder::class.java)
         }
 
-    fun getPet(petId: String, expectedStatusCode: Int = 200) =
+    fun getStoreOrder(orderId: String, expectedStatusCode: Int = 200) =
         Given {
             spec(requestSpecification)
         } When {
-            get("$PET/$petId")
+            get("${STORE.plus(ORDER)}/$orderId")
         } Then {
             statusCode(expectedStatusCode)
-        } Extract  {
-            if (expectedStatusCode != 200)
-                response().body().`as`(ResponseMessage::class.java)
-            else
-                response().body().`as`(PetGetResponse::class.java)
-        }
+        } 
 
 
-    fun deletePet(petId: String) =
+    fun deleteStoreOrder(orderId: String) =
         Given {
             spec(requestSpecification)
         } When {
-            delete("$PET/$petId")
+            delete("${STORE.plus(ORDER)}/$orderId")
         } Then {
             statusCode(200)
         }

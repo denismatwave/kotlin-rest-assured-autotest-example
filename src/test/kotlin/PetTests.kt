@@ -10,7 +10,7 @@ import requests.Pet.deletePet
 import requests.Pet.getPet
 import requests.Pet.postPet
 
-class SimpleTest {
+class PetTests {
 
     private lateinit var petRequest : Pet
 
