@@ -2,8 +2,8 @@ import io.kotest.matchers.longs.shouldBeNonNegative
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import models.Pet
+import models.PetGetResponse
 import models.ResponseMessage
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import requests.Pet.deletePet
@@ -21,7 +21,7 @@ class SimpleTest {
 
     @Test
     fun test() {
-        val pet = postPet(petRequest).extract().body().`as`(Pet::class.java)
+        val pet = postPet(petRequest)
         with (pet) {
             id.shouldNotBeNull()
             name.shouldBe(petRequest.name)
@@ -29,18 +29,19 @@ class SimpleTest {
         }
         val petId = pet.id.toString()
 
-        getPet(petId).extract().body().jsonPath().get<Long>("id")
-            .shouldBeNonNegative()
-            .shouldBe(petId.toLong())
+        with (getPet(petId) as PetGetResponse) {
+            id?.shouldBeNonNegative()
+            id.shouldBe(petId.toLong())
+        }
 
         deletePet(petId)
     }
 
     @Test
     fun testDeletePet() {
-        val pet = postPet(petRequest).extract().body().`as`(Pet::class.java)
+        val pet = postPet(petRequest)
         deletePet(pet.id.toString())
-        with(getPet(pet.id.toString(), 404).extract().body().`as`(ResponseMessage::class.java)) {
+        with(getPet(pet.id.toString(), 404) as ResponseMessage) {
             message.shouldBe("Pet not found")
             type.shouldBe("error")
         }
